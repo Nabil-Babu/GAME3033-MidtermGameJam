@@ -41,6 +41,22 @@ public class @GameInputs : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": ""Press""
+                },
+                {
+                    ""name"": ""Look"",
+                    ""type"": ""Value"",
+                    ""id"": ""2fd33076-d7a6-4233-ae5d-de25bf7251a2"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": ""NormalizeVector2"",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Defend"",
+                    ""type"": ""Button"",
+                    ""id"": ""0fde047a-eb52-4775-b994-4d38c2156645"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press(behavior=2)""
                 }
             ],
             ""bindings"": [
@@ -120,6 +136,28 @@ public class @GameInputs : IInputActionCollection, IDisposable
                     ""action"": ""Attack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4e5d7f9d-acce-47b8-b29d-ef44b1e1f08d"",
+                    ""path"": ""<Mouse>/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Look"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""adea9b48-e413-4217-8021-d3ea8073ee26"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Defend"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -131,6 +169,8 @@ public class @GameInputs : IInputActionCollection, IDisposable
         m_ThirdPerson_Movement = m_ThirdPerson.FindAction("Movement", throwIfNotFound: true);
         m_ThirdPerson_Jump = m_ThirdPerson.FindAction("Jump", throwIfNotFound: true);
         m_ThirdPerson_Attack = m_ThirdPerson.FindAction("Attack", throwIfNotFound: true);
+        m_ThirdPerson_Look = m_ThirdPerson.FindAction("Look", throwIfNotFound: true);
+        m_ThirdPerson_Defend = m_ThirdPerson.FindAction("Defend", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -183,6 +223,8 @@ public class @GameInputs : IInputActionCollection, IDisposable
     private readonly InputAction m_ThirdPerson_Movement;
     private readonly InputAction m_ThirdPerson_Jump;
     private readonly InputAction m_ThirdPerson_Attack;
+    private readonly InputAction m_ThirdPerson_Look;
+    private readonly InputAction m_ThirdPerson_Defend;
     public struct ThirdPersonActions
     {
         private @GameInputs m_Wrapper;
@@ -190,6 +232,8 @@ public class @GameInputs : IInputActionCollection, IDisposable
         public InputAction @Movement => m_Wrapper.m_ThirdPerson_Movement;
         public InputAction @Jump => m_Wrapper.m_ThirdPerson_Jump;
         public InputAction @Attack => m_Wrapper.m_ThirdPerson_Attack;
+        public InputAction @Look => m_Wrapper.m_ThirdPerson_Look;
+        public InputAction @Defend => m_Wrapper.m_ThirdPerson_Defend;
         public InputActionMap Get() { return m_Wrapper.m_ThirdPerson; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -208,6 +252,12 @@ public class @GameInputs : IInputActionCollection, IDisposable
                 @Attack.started -= m_Wrapper.m_ThirdPersonActionsCallbackInterface.OnAttack;
                 @Attack.performed -= m_Wrapper.m_ThirdPersonActionsCallbackInterface.OnAttack;
                 @Attack.canceled -= m_Wrapper.m_ThirdPersonActionsCallbackInterface.OnAttack;
+                @Look.started -= m_Wrapper.m_ThirdPersonActionsCallbackInterface.OnLook;
+                @Look.performed -= m_Wrapper.m_ThirdPersonActionsCallbackInterface.OnLook;
+                @Look.canceled -= m_Wrapper.m_ThirdPersonActionsCallbackInterface.OnLook;
+                @Defend.started -= m_Wrapper.m_ThirdPersonActionsCallbackInterface.OnDefend;
+                @Defend.performed -= m_Wrapper.m_ThirdPersonActionsCallbackInterface.OnDefend;
+                @Defend.canceled -= m_Wrapper.m_ThirdPersonActionsCallbackInterface.OnDefend;
             }
             m_Wrapper.m_ThirdPersonActionsCallbackInterface = instance;
             if (instance != null)
@@ -221,6 +271,12 @@ public class @GameInputs : IInputActionCollection, IDisposable
                 @Attack.started += instance.OnAttack;
                 @Attack.performed += instance.OnAttack;
                 @Attack.canceled += instance.OnAttack;
+                @Look.started += instance.OnLook;
+                @Look.performed += instance.OnLook;
+                @Look.canceled += instance.OnLook;
+                @Defend.started += instance.OnDefend;
+                @Defend.performed += instance.OnDefend;
+                @Defend.canceled += instance.OnDefend;
             }
         }
     }
@@ -230,5 +286,7 @@ public class @GameInputs : IInputActionCollection, IDisposable
         void OnMovement(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
         void OnAttack(InputAction.CallbackContext context);
+        void OnLook(InputAction.CallbackContext context);
+        void OnDefend(InputAction.CallbackContext context);
     }
 }

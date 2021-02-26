@@ -24,6 +24,8 @@ public class PlayerMovement : MonoBehaviour
     private static readonly int RunBackward = Animator.StringToHash("Run Backward");
     private static readonly int StrafeRight = Animator.StringToHash("Strafe Right");
     private static readonly int StrafeLeft = Animator.StringToHash("Strafe Left");
+    private static readonly int AttackHash1 = Animator.StringToHash("Melee Right Attack 01");
+    private static readonly int DefendHash = Animator.StringToHash("Defend");
 
     void Awake()
     {
@@ -40,8 +42,40 @@ public class PlayerMovement : MonoBehaviour
         AnimateMovement();
     }
 
+    public void OnAttack(InputValue value)
+    {
+        if (_playerState.isDefending) return;
+        if (value.isPressed)
+        {
+            _playerAnimator.SetTrigger(AttackHash1);
+        }
+    }
+
+    public void OnDefend(InputValue value)
+    {
+        if (value.isPressed)
+        {
+            _playerAnimator.SetBool(DefendHash, true);
+            _playerState.isDefending = true;
+            _playerState.isRunning = false;
+            _playerState.isStrafing = false;
+            
+            _playerAnimator.SetBool(StrafeRight, false);
+            _playerAnimator.SetBool(StrafeLeft, false);
+            _playerAnimator.SetBool(Run, false);
+            _playerAnimator.SetBool(RunBackward, false);
+        }
+        else
+        {
+            _playerAnimator.SetBool(DefendHash, false);
+            _playerState.isDefending = false;
+            AnimateMovement();      
+        }
+    }
+
     public void AnimateMovement()
     {
+        
         if (_inputVector.y > 0)
         {
             _playerAnimator.SetBool(Run, true);
@@ -85,9 +119,13 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        if (_playerState.isDefending)
+        {
+            _moveDirection = Vector3.zero;
+            return;
+        }
         _playerState.isIdling = !(_inputVector.sqrMagnitude > 0);
         if (!(_inputVector.sqrMagnitude > 0)) _moveDirection = Vector3.zero;
-        
         _moveDirection = _playerTransform.forward * _inputVector.y + _playerTransform.right * _inputVector.x;
         float currentSpeed = _playerState.isStrafing ? strafeSpeed : runSpeed; 
         Vector3 movementDirection = _moveDirection * (currentSpeed * Time.deltaTime);

@@ -7,4 +7,6 @@ public class PlayerState : MonoBehaviour
     public bool isRunning;
     public bool isStrafing;
     public bool isIdling;
+    public bool isAttacking;
+    public bool isDefending; 
 }
