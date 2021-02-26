@@ -1,0 +1,13 @@
+﻿# Default ignored files
+/shelf/
+/workspace.xml
+# Rider ignored files
+/modules.xml
+/projectSettingsUpdater.xml
+/.idea.GAME3033-MidtermGameJam.iml
+/contentModel.xml
+# Datasource local storage ignored files
+/../../../../../../../../../../../:\Users\nabil\Documents\School Code\Year 3\GAME3033-GameEngine4\GAME3033-MidtermGameJam\.idea\.idea.GAME3033-MidtermGameJam\.idea/dataSources/
+/dataSources.local.xml
+# Editor-based HTTP Client requests
+/httpRequests/
