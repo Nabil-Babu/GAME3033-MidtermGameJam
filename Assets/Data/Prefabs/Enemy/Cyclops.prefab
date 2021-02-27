@@ -1146,6 +1146,7 @@ GameObject:
   - component: {fileID: 1152718413688141032}
   - component: {fileID: 1152718413688141047}
   - component: {fileID: 1152718413688141046}
+  - component: {fileID: 1399683537936675}
   m_Layer: 0
   m_Name: Cyclops
   m_TagString: Untagged
@@ -1246,6 +1247,7 @@ MonoBehaviour:
   navMeshAgent: {fileID: 0}
   player: {fileID: 0}
   currentState: 0
+  currentColor: 0
 --- !u!195 &1152718413688141046
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1268,6 +1270,21 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &1399683537936675
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1151723360035802437}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b29186afee64f5540befd500e920b1d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthBar: {fileID: 2449351789690636460}
+  currentHealth: 100
+  maxHealth: 100
 --- !u!1 &1151736346265822999
 GameObject:
   m_ObjectHideFlags: 0
@@ -1933,7 +1950,7 @@ GameObject:
   - component: {fileID: 4599190328269522227}
   - component: {fileID: 4797081999446468073}
   m_Layer: 0
-  m_Name: Canvas
+  m_Name: EnemyHealth
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

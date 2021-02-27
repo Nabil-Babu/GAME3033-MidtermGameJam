@@ -18,7 +18,8 @@ public class EnemyBehaviour : MonoBehaviour
 {
     public NavMeshAgent navMeshAgent;
     public PlayerState player;
-    public AgentStates currentState; 
+    public AgentStates currentState;
+    public ColorState currentColor;
     
     private Animator _agentAnimator;
     private HealthBar _healthBar; 
@@ -34,7 +35,9 @@ public class EnemyBehaviour : MonoBehaviour
         navMeshAgent = GetComponent<NavMeshAgent>();
         player = FindObjectOfType<PlayerState>();
         _agentAnimator = GetComponent<Animator>();
-        _healthBar = GetComponent<HealthBar>(); 
+        _healthBar = GetComponent<HealthBar>();
+        currentColor = ColorState.RED;
+        _healthBar.UpdateColor(currentColor);
     }
 
     

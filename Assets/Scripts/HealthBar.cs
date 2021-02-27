@@ -14,4 +14,20 @@ public class HealthBar : MonoBehaviour
         currentHealth -= amount;
         healthBar.fillAmount = currentHealth / maxHealth;
     }
+
+    public void UpdateColor(ColorState state)
+    {
+        switch (state)
+        {
+            case ColorState.RED:
+                healthBar.color = Color.red;
+                break;
+            case ColorState.GREEN:
+                healthBar.color = Color.green;
+                break;
+            case ColorState.BLUE:
+                healthBar.color = Color.blue;
+                break;
+        }
+    }
 }

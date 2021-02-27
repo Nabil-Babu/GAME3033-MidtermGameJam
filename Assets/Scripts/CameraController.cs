@@ -21,6 +21,7 @@ public class CameraController : MonoBehaviour
 
     public void OnLook(InputValue delta)
     {
+        if (Time.timeScale == 0) return;
         Vector2 aimValue = delta.Get<Vector2>();
         _followTargetTransform.rotation *=
             Quaternion.AngleAxis(

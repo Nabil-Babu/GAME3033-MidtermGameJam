@@ -4,23 +4,35 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+public enum ColorState
+{
+    RED,
+    GREEN,
+    BLUE
+}
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private float strafeSpeed;
     [SerializeField] private float runSpeed;
     [SerializeField] private float jumpForce;
     [SerializeField] private GameObject hitPoint; 
+    [SerializeField] private GameObject pauseMenu; 
     
     // Components
     private Animator _playerAnimator;
     private Rigidbody _playerRigidbody;
-    private PlayerState _playerState; 
-    
+    private PlayerState _playerState;
+    private HealthBar _healthBar;
+
     // Cached References
     private Transform _playerTransform;
     
     private Vector2 _inputVector = Vector2.zero;
     private Vector3 _moveDirection = Vector3.zero;
+    
+    //Player Stats
+    public ColorState currentColor; 
+    
     private static readonly int Run = Animator.StringToHash("Run");
     private static readonly int RunBackward = Animator.StringToHash("Run Backward");
     private static readonly int StrafeRight = Animator.StringToHash("Strafe Right");
@@ -29,6 +41,7 @@ public class PlayerMovement : MonoBehaviour
     private static readonly int AttackHash2 = Animator.StringToHash("Melee Right Attack 02");
     private static readonly int AttackHash3 = Animator.StringToHash("Melee Right Attack 03");
     private static readonly int DefendHash = Animator.StringToHash("Defend");
+    private static readonly int PotionHash = Animator.StringToHash("Drink Potion");
 
     void Awake()
     {
@@ -36,12 +49,23 @@ public class PlayerMovement : MonoBehaviour
         _playerRigidbody = GetComponent<Rigidbody>();
         _playerAnimator = GetComponent<Animator>();
         _playerState = GetComponent<PlayerState>();
+        _healthBar = GetComponent<HealthBar>();
+        currentColor = ColorState.GREEN; 
+        pauseMenu.SetActive(false);
     }
 
     public void OnMovement(InputValue value)
     {
         _inputVector = value.Get<Vector2>();
         AnimateMovement();
+    }
+
+    public void OnPauseMenu(InputValue value)
+    {
+        if (value.isPressed)
+        {
+            PauseGame();
+        }
     }
 
     public void OnAttack(InputValue value)
@@ -51,6 +75,22 @@ public class PlayerMovement : MonoBehaviour
         {
             StartCoroutine(StartAttack());
         }
+    }
+
+    public void OnRedMode(InputValue value)
+    {
+        if(value.isPressed) currentColor = ColorState.RED;
+        _playerAnimator.SetTrigger(PotionHash);
+    }
+    public void OnGreenMode(InputValue value)
+    {
+        if(value.isPressed) currentColor = ColorState.GREEN;
+        _playerAnimator.SetTrigger(PotionHash);
+    }
+    public void OnBlueMode(InputValue value)
+    {
+        if(value.isPressed) currentColor = ColorState.BLUE;
+        _playerAnimator.SetTrigger(PotionHash);
     }
 
     public void OnDefend(InputValue value)
@@ -121,17 +161,15 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        if (_playerState.isDefending)
-        {
-            _moveDirection = Vector3.zero;
-            return;
-        }
+        if (_playerState.isDefending) return;
         _playerState.isIdling = !(_inputVector.sqrMagnitude > 0);
         if (!(_inputVector.sqrMagnitude > 0)) _moveDirection = Vector3.zero;
         _moveDirection = _playerTransform.forward * _inputVector.y + _playerTransform.right * _inputVector.x;
         float currentSpeed = _playerState.isStrafing ? strafeSpeed : runSpeed; 
         Vector3 movementDirection = _moveDirection * (currentSpeed * Time.deltaTime);
         _playerTransform.position += movementDirection;
+        
+        _healthBar.UpdateColor(currentColor);
     }
 
     private void CheckHitPoint()
@@ -145,7 +183,14 @@ public class PlayerMovement : MonoBehaviour
                 {
                     Debug.Log(hit.collider.gameObject.name);
                     enemy.GetComponent<Rigidbody>().AddForce(transform.forward * 300);
-                    enemy.TakeDamage(50);
+                    if (enemy.currentColor == currentColor)
+                    {
+                        enemy.TakeDamage(50);
+                    }
+                    else
+                    {
+                        enemy.TakeDamage(10);
+                    }
                 }
             }
         }
@@ -159,5 +204,18 @@ public class PlayerMovement : MonoBehaviour
         CheckHitPoint();
         yield return new WaitForSeconds(0.2f);
         _playerState.isAttacking = false;
+    }
+
+    public void PauseGame()
+    {
+        pauseMenu.SetActive(!pauseMenu.activeInHierarchy);
+        if (pauseMenu.activeInHierarchy)
+        {
+            Time.timeScale = 0;
+        }
+        else
+        {
+            Time.timeScale = 1;
+        }
     }
 }

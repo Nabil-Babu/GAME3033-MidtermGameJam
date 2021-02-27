@@ -57,6 +57,38 @@ public class @GameInputs : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": ""Press(behavior=2)""
+                },
+                {
+                    ""name"": ""RedMode"",
+                    ""type"": ""Button"",
+                    ""id"": ""b5365134-7461-4ae3-a852-e16f5be31f95"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press""
+                },
+                {
+                    ""name"": ""GreenMode"",
+                    ""type"": ""Button"",
+                    ""id"": ""4bf77848-1a52-4e59-a0fd-aa4eefd1cf73"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press""
+                },
+                {
+                    ""name"": ""BlueMode"",
+                    ""type"": ""Button"",
+                    ""id"": ""3d3c8dd4-d27e-4255-adab-daa3303fae61"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press""
+                },
+                {
+                    ""name"": ""PauseMenu"",
+                    ""type"": ""Button"",
+                    ""id"": ""13d9f3d1-7613-4302-afdc-f54d4eee7e95"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press""
                 }
             ],
             ""bindings"": [
@@ -158,6 +190,50 @@ public class @GameInputs : IInputActionCollection, IDisposable
                     ""action"": ""Defend"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c8c3c01c-2930-47af-9208-23237dcc5817"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RedMode"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f32aea6e-e5a0-4dbc-ad86-0f52cfa13f91"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""GreenMode"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0e511c53-4ae0-4f5a-834d-94e8c080645f"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BlueMode"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ba9d8fc1-a8d9-42fc-b69f-54d2e9913e10"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PauseMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -171,6 +247,10 @@ public class @GameInputs : IInputActionCollection, IDisposable
         m_ThirdPerson_Attack = m_ThirdPerson.FindAction("Attack", throwIfNotFound: true);
         m_ThirdPerson_Look = m_ThirdPerson.FindAction("Look", throwIfNotFound: true);
         m_ThirdPerson_Defend = m_ThirdPerson.FindAction("Defend", throwIfNotFound: true);
+        m_ThirdPerson_RedMode = m_ThirdPerson.FindAction("RedMode", throwIfNotFound: true);
+        m_ThirdPerson_GreenMode = m_ThirdPerson.FindAction("GreenMode", throwIfNotFound: true);
+        m_ThirdPerson_BlueMode = m_ThirdPerson.FindAction("BlueMode", throwIfNotFound: true);
+        m_ThirdPerson_PauseMenu = m_ThirdPerson.FindAction("PauseMenu", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -225,6 +305,10 @@ public class @GameInputs : IInputActionCollection, IDisposable
     private readonly InputAction m_ThirdPerson_Attack;
     private readonly InputAction m_ThirdPerson_Look;
     private readonly InputAction m_ThirdPerson_Defend;
+    private readonly InputAction m_ThirdPerson_RedMode;
+    private readonly InputAction m_ThirdPerson_GreenMode;
+    private readonly InputAction m_ThirdPerson_BlueMode;
+    private readonly InputAction m_ThirdPerson_PauseMenu;
     public struct ThirdPersonActions
     {
         private @GameInputs m_Wrapper;
@@ -234,6 +318,10 @@ public class @GameInputs : IInputActionCollection, IDisposable
         public InputAction @Attack => m_Wrapper.m_ThirdPerson_Attack;
         public InputAction @Look => m_Wrapper.m_ThirdPerson_Look;
         public InputAction @Defend => m_Wrapper.m_ThirdPerson_Defend;
+        public InputAction @RedMode => m_Wrapper.m_ThirdPerson_RedMode;
+        public InputAction @GreenMode => m_Wrapper.m_ThirdPerson_GreenMode;
+        public InputAction @BlueMode => m_Wrapper.m_ThirdPerson_BlueMode;
+        public InputAction @PauseMenu => m_Wrapper.m_ThirdPerson_PauseMenu;
         public InputActionMap Get() { return m_Wrapper.m_ThirdPerson; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -258,6 +346,18 @@ public class @GameInputs : IInputActionCollection, IDisposable
                 @Defend.started -= m_Wrapper.m_ThirdPersonActionsCallbackInterface.OnDefend;
                 @Defend.performed -= m_Wrapper.m_ThirdPersonActionsCallbackInterface.OnDefend;
                 @Defend.canceled -= m_Wrapper.m_ThirdPersonActionsCallbackInterface.OnDefend;
+                @RedMode.started -= m_Wrapper.m_ThirdPersonActionsCallbackInterface.OnRedMode;
+                @RedMode.performed -= m_Wrapper.m_ThirdPersonActionsCallbackInterface.OnRedMode;
+                @RedMode.canceled -= m_Wrapper.m_ThirdPersonActionsCallbackInterface.OnRedMode;
+                @GreenMode.started -= m_Wrapper.m_ThirdPersonActionsCallbackInterface.OnGreenMode;
+                @GreenMode.performed -= m_Wrapper.m_ThirdPersonActionsCallbackInterface.OnGreenMode;
+                @GreenMode.canceled -= m_Wrapper.m_ThirdPersonActionsCallbackInterface.OnGreenMode;
+                @BlueMode.started -= m_Wrapper.m_ThirdPersonActionsCallbackInterface.OnBlueMode;
+                @BlueMode.performed -= m_Wrapper.m_ThirdPersonActionsCallbackInterface.OnBlueMode;
+                @BlueMode.canceled -= m_Wrapper.m_ThirdPersonActionsCallbackInterface.OnBlueMode;
+                @PauseMenu.started -= m_Wrapper.m_ThirdPersonActionsCallbackInterface.OnPauseMenu;
+                @PauseMenu.performed -= m_Wrapper.m_ThirdPersonActionsCallbackInterface.OnPauseMenu;
+                @PauseMenu.canceled -= m_Wrapper.m_ThirdPersonActionsCallbackInterface.OnPauseMenu;
             }
             m_Wrapper.m_ThirdPersonActionsCallbackInterface = instance;
             if (instance != null)
@@ -277,6 +377,18 @@ public class @GameInputs : IInputActionCollection, IDisposable
                 @Defend.started += instance.OnDefend;
                 @Defend.performed += instance.OnDefend;
                 @Defend.canceled += instance.OnDefend;
+                @RedMode.started += instance.OnRedMode;
+                @RedMode.performed += instance.OnRedMode;
+                @RedMode.canceled += instance.OnRedMode;
+                @GreenMode.started += instance.OnGreenMode;
+                @GreenMode.performed += instance.OnGreenMode;
+                @GreenMode.canceled += instance.OnGreenMode;
+                @BlueMode.started += instance.OnBlueMode;
+                @BlueMode.performed += instance.OnBlueMode;
+                @BlueMode.canceled += instance.OnBlueMode;
+                @PauseMenu.started += instance.OnPauseMenu;
+                @PauseMenu.performed += instance.OnPauseMenu;
+                @PauseMenu.canceled += instance.OnPauseMenu;
             }
         }
     }
@@ -288,5 +400,9 @@ public class @GameInputs : IInputActionCollection, IDisposable
         void OnAttack(InputAction.CallbackContext context);
         void OnLook(InputAction.CallbackContext context);
         void OnDefend(InputAction.CallbackContext context);
+        void OnRedMode(InputAction.CallbackContext context);
+        void OnGreenMode(InputAction.CallbackContext context);
+        void OnBlueMode(InputAction.CallbackContext context);
+        void OnPauseMenu(InputAction.CallbackContext context);
     }
 }

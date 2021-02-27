@@ -44,6 +44,38 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "Press(behavior=2)"
+                },
+                {
+                    "name": "RedMode",
+                    "type": "Button",
+                    "id": "b5365134-7461-4ae3-a852-e16f5be31f95",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press"
+                },
+                {
+                    "name": "GreenMode",
+                    "type": "Button",
+                    "id": "4bf77848-1a52-4e59-a0fd-aa4eefd1cf73",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press"
+                },
+                {
+                    "name": "BlueMode",
+                    "type": "Button",
+                    "id": "3d3c8dd4-d27e-4255-adab-daa3303fae61",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press"
+                },
+                {
+                    "name": "PauseMenu",
+                    "type": "Button",
+                    "id": "13d9f3d1-7613-4302-afdc-f54d4eee7e95",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press"
                 }
             ],
             "bindings": [
@@ -143,6 +175,50 @@
                     "processors": "",
                     "groups": "",
                     "action": "Defend",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c8c3c01c-2930-47af-9208-23237dcc5817",
+                    "path": "<Keyboard>/1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RedMode",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f32aea6e-e5a0-4dbc-ad86-0f52cfa13f91",
+                    "path": "<Keyboard>/2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "GreenMode",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0e511c53-4ae0-4f5a-834d-94e8c080645f",
+                    "path": "<Keyboard>/3",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "BlueMode",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ba9d8fc1-a8d9-42fc-b69f-54d2e9913e10",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PauseMenu",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
