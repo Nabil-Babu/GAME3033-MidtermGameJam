@@ -9,6 +9,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float strafeSpeed;
     [SerializeField] private float runSpeed;
     [SerializeField] private float jumpForce;
+    [SerializeField] private GameObject hitPoint; 
     
     // Components
     private Animator _playerAnimator;
@@ -25,6 +26,8 @@ public class PlayerMovement : MonoBehaviour
     private static readonly int StrafeRight = Animator.StringToHash("Strafe Right");
     private static readonly int StrafeLeft = Animator.StringToHash("Strafe Left");
     private static readonly int AttackHash1 = Animator.StringToHash("Melee Right Attack 01");
+    private static readonly int AttackHash2 = Animator.StringToHash("Melee Right Attack 02");
+    private static readonly int AttackHash3 = Animator.StringToHash("Melee Right Attack 03");
     private static readonly int DefendHash = Animator.StringToHash("Defend");
 
     void Awake()
@@ -38,7 +41,6 @@ public class PlayerMovement : MonoBehaviour
     public void OnMovement(InputValue value)
     {
         _inputVector = value.Get<Vector2>();
-        Debug.Log("Input Vector: "+_inputVector);
         AnimateMovement();
     }
 
@@ -47,7 +49,7 @@ public class PlayerMovement : MonoBehaviour
         if (_playerState.isDefending) return;
         if (value.isPressed)
         {
-            _playerAnimator.SetTrigger(AttackHash1);
+            StartCoroutine(StartAttack());
         }
     }
 
@@ -130,5 +132,32 @@ public class PlayerMovement : MonoBehaviour
         float currentSpeed = _playerState.isStrafing ? strafeSpeed : runSpeed; 
         Vector3 movementDirection = _moveDirection * (currentSpeed * Time.deltaTime);
         _playerTransform.position += movementDirection;
+    }
+
+    private void CheckHitPoint()
+    {
+        RaycastHit[] hits = Physics.BoxCastAll(hitPoint.transform.position, Vector3.one/2, transform.forward, Quaternion.identity, 0.0f);
+        if (hits.Length > 0)
+        {
+            foreach (var hit in hits)
+            {
+                if (hit.collider.gameObject.TryGetComponent<EnemyBehaviour>(out var enemy))
+                {
+                    Debug.Log(hit.collider.gameObject.name);
+                    enemy.GetComponent<Rigidbody>().AddForce(transform.forward * 300);
+                    enemy.TakeDamage(50);
+                }
+            }
+        }
+    }
+
+    IEnumerator StartAttack()
+    {
+        _playerAnimator.SetTrigger(AttackHash2);
+        _playerState.isAttacking = true;
+        yield return new WaitForSeconds(0.5f);
+        CheckHitPoint();
+        yield return new WaitForSeconds(0.2f);
+        _playerState.isAttacking = false;
     }
 }
