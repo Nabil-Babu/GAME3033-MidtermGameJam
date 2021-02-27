@@ -17,6 +17,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float jumpForce;
     [SerializeField] private GameObject hitPoint; 
     [SerializeField] private GameObject pauseMenu; 
+    [SerializeField] private GameManager gameManager; 
     
     // Components
     private Animator _playerAnimator;
@@ -42,6 +43,7 @@ public class PlayerMovement : MonoBehaviour
     private static readonly int AttackHash3 = Animator.StringToHash("Melee Right Attack 03");
     private static readonly int DefendHash = Animator.StringToHash("Defend");
     private static readonly int PotionHash = Animator.StringToHash("Drink Potion");
+    private static readonly int DieHash = Animator.StringToHash("Die");
 
     void Awake()
     {
@@ -161,6 +163,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        if (_playerState.isDead) return; 
         if (_playerState.isDefending) return;
         _playerState.isIdling = !(_inputVector.sqrMagnitude > 0);
         if (!(_inputVector.sqrMagnitude > 0)) _moveDirection = Vector3.zero;
@@ -216,6 +219,19 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             Time.timeScale = 1;
+        }
+    }
+
+    public void TakeDamage(float amount)
+    {
+        if (_playerState.isDead) return;
+        _healthBar.TakeDamage(amount);
+
+        if (_healthBar.currentHealth <= 0)
+        {
+            _playerAnimator.SetTrigger(DieHash);
+            _playerState.isDead = true;
+            gameManager.GameOver();
         }
     }
 }

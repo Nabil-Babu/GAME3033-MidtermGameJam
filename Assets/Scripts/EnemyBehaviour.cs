@@ -20,9 +20,14 @@ public class EnemyBehaviour : MonoBehaviour
     public PlayerState player;
     public AgentStates currentState;
     public ColorState currentColor;
+    public GameObject HitPoint;
+    public GameManager gameManager;
     
     private Animator _agentAnimator;
-    private HealthBar _healthBar; 
+    private HealthBar _healthBar;
+
+    private bool _isAttacking = false; 
+    
     private static readonly int RunHash = Animator.StringToHash("Run");
     private static readonly int AttackHash1 = Animator.StringToHash("Melee Right Attack 01");
     private static readonly int AttackHash2 = Animator.StringToHash("Melee Right Attack 02");
@@ -32,11 +37,12 @@ public class EnemyBehaviour : MonoBehaviour
 
     void Start()
     {
+        gameManager = FindObjectOfType<GameManager>();
         navMeshAgent = GetComponent<NavMeshAgent>();
         player = FindObjectOfType<PlayerState>();
         _agentAnimator = GetComponent<Animator>();
         _healthBar = GetComponent<HealthBar>();
-        currentColor = ColorState.RED;
+        currentColor = (ColorState) Random.Range(0, 3);
         _healthBar.UpdateColor(currentColor);
     }
 
@@ -61,6 +67,7 @@ public class EnemyBehaviour : MonoBehaviour
             case AgentStates.ATTACK:
                 _agentAnimator.SetTrigger(AttackHash2);
                 _agentAnimator.SetBool(RunHash, false);
+                if (!_isAttacking) StartCoroutine(AttackPlayer());
                 break;
         }
     }
@@ -97,6 +104,38 @@ public class EnemyBehaviour : MonoBehaviour
     IEnumerator DelayDeath()
     {
         yield return new WaitForSeconds(1.5f);
+        gameManager.IncreaseKillCount();
         Destroy(gameObject);
+    }
+    
+    private void CheckHitPoint()
+    {
+        RaycastHit[] hits = Physics.BoxCastAll(HitPoint.transform.position, Vector3.one/2, transform.forward, Quaternion.identity, 0.0f);
+        if (hits.Length > 0)
+        {
+            foreach (var hit in hits)
+            {
+                if (hit.collider.gameObject.TryGetComponent<PlayerState>(out var enemy))
+                {
+                    if (enemy.isDefending)
+                    {
+                        enemy.GetComponent<PlayerMovement>().TakeDamage(10);
+                    }
+                    else
+                    {
+                        enemy.GetComponent<PlayerMovement>().TakeDamage(20);
+                    }
+                }
+            }
+        }
+    }
+
+    IEnumerator AttackPlayer()
+    {
+        _isAttacking = true;
+        yield return new WaitForSeconds(0.5f);
+        CheckHitPoint(); 
+        yield return new WaitForSeconds(0.5f);
+        _isAttacking = false; 
     }
 }
