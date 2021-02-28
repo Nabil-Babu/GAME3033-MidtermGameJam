@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         WinLimit = EnemySpawner.spawnLimit;
-        Invoke(nameof(StartBattle), 5.0f);
+        Invoke(nameof(StartBattle), 10.0f);
     }
     
     public void StartBattle()

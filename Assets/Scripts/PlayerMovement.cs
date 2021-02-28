@@ -17,7 +17,10 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float jumpForce;
     [SerializeField] private GameObject hitPoint; 
     [SerializeField] private GameObject pauseMenu; 
-    [SerializeField] private GameManager gameManager; 
+    [SerializeField] private GameManager gameManager;
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip hitSound;
+    
     
     // Components
     private Animator _playerAnimator;
@@ -180,6 +183,7 @@ public class PlayerMovement : MonoBehaviour
         RaycastHit[] hits = Physics.BoxCastAll(hitPoint.transform.position, Vector3.one/2, transform.forward, Quaternion.identity, 0.0f);
         if (hits.Length > 0)
         {
+            audioSource.PlayOneShot(hitSound);
             foreach (var hit in hits)
             {
                 if (hit.collider.gameObject.TryGetComponent<EnemyBehaviour>(out var enemy))
