@@ -59,6 +59,13 @@ public class PlayerMovement : MonoBehaviour
         pauseMenu.SetActive(false);
     }
 
+    void Start()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        if (Time.timeScale == 0)
+            Time.timeScale = 1;
+    }
+
     public void OnMovement(InputValue value)
     {
         _inputVector = value.Get<Vector2>();
@@ -219,10 +226,12 @@ public class PlayerMovement : MonoBehaviour
         if (pauseMenu.activeInHierarchy)
         {
             Time.timeScale = 0;
+            Cursor.lockState = CursorLockMode.None;
         }
         else
         {
             Time.timeScale = 1;
+            Cursor.lockState = CursorLockMode.Locked;
         }
     }
 
